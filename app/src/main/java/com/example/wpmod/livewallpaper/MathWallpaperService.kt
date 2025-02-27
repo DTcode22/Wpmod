@@ -1,12 +1,14 @@
 package com.example.wpmod.livewallpaper
-import com.example.wpmod.renderer.PatternRenderer
-import com.example.wpmod.model.RenderPatternType
+
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
 import android.os.Handler
 import android.os.Looper
+import com.example.wpmod.model.RenderPatternType
+import com.example.wpmod.renderer.PatternRenderer
 
 class MathWallpaperService : WallpaperService() {
     override fun onCreateEngine(): Engine = MathWallpaperEngine()
@@ -16,9 +18,7 @@ class MathWallpaperService : WallpaperService() {
         private var isVisible = false
         private var time = 0f
 
-        // Add handler initialization
         private val handler = Handler(Looper.getMainLooper())
-
         private val updateCallback = object : Runnable {
             override fun run() {
                 drawFrame()
@@ -28,12 +28,17 @@ class MathWallpaperService : WallpaperService() {
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
             super.onSurfaceCreated(holder)
-            renderer.loadPattern(RenderPatternType.VORTEX)
+            // Initial pattern load can be removed or kept for default behavior
         }
 
         override fun onVisibilityChanged(visible: Boolean) {
             isVisible = visible
             if (visible) {
+                val sharedPref = applicationContext.getSharedPreferences("wallpaper_prefs", Context.MODE_PRIVATE)
+                val patternName = sharedPref.getString("selected_pattern", RenderPatternType.VORTEX.name)
+                val patternType = RenderPatternType.fromString(patternName ?: RenderPatternType.VORTEX.name)
+                    ?: RenderPatternType.VORTEX
+                renderer.loadPattern(patternType)
                 handler.post(updateCallback)
             } else {
                 handler.removeCallbacks(updateCallback)
