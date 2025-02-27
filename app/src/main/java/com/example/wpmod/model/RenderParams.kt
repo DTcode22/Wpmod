@@ -54,5 +54,32 @@ data class RenderParams(
             yScale = 0.7f,
             eoMultiplier = 1f
         )
+
+        fun defaultSpiralParams() = RenderParams(
+            speed = 2.5f,
+            scale = 1f,
+            intensity = 1f,
+            distortion = 5f,
+            xOffset = 200f,
+            yOffset = 200f,
+            dotSize = 1,
+            xMax = 90,
+            yMax = 90,
+            step = 1,
+            xDivisor = 3f,
+            xSubtractor = 11.5f,
+            yDivisor = 9f,
+            ySubtractor = 5f,
+            oBase = 2f,
+            oDivisor = 5.5f,
+            sinDivisor = 2f,
+            cosMultiplier = 6.6f,
+            xKMultiplier = 4f,
+            xScale = 0.7f,
+            koMultiplier = 4f,
+            yDivFactor = 16f,
+            yScale = 0.7f,
+            eoMultiplier = 4f
+        )
     }
 }

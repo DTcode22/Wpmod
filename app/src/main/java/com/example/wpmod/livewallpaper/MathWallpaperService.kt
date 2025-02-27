@@ -55,5 +55,9 @@ class MathWallpaperService : WallpaperService() {
                 canvas?.let { surfaceHolder.unlockCanvasAndPost(it) }
             }
         }
+
+        fun updatePattern(patternType: RenderPatternType) {
+            renderer.loadPattern(patternType)
+        }
     }
 }

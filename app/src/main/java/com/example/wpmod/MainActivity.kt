@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.wpmod.ui.theme.WpmodTheme
 import com.example.wpmod.renderer.PatternRenderer
 import com.example.wpmod.model.RenderPatternType
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.layout.Row
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,22 +59,21 @@ fun GreetingPreview() {
 
 @Composable
 fun PatternSelector(renderer: PatternRenderer) {
-    val expanded = remember { mutableStateOf(false) }
     val selectedPattern = remember { mutableStateOf(RenderPatternType.VORTEX) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = { expanded.value = true }) {
-            Text(text = "Select Pattern")
-        }
-        DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
-            RenderPatternType.values().forEach { patternType ->
-                DropdownMenuItem(onClick = {
-                    selectedPattern.value = patternType
-                    renderer.loadPattern(patternType)
-                    expanded.value = false
-                }) {
-                    Text(text = patternType.name)
-                }
+        RenderPatternType.values().forEach { patternType ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = selectedPattern.value == patternType,
+                    onCheckedChange = {
+                        if (it) {
+                            selectedPattern.value = patternType
+                            renderer.loadPattern(patternType)
+                        }
+                    }
+                )
+                Text(text = patternType.name)
             }
         }
         Text(text = "Selected Pattern: ${selectedPattern.value}")
